@@ -7,6 +7,10 @@ const routes = [
     component: () => import('../views/FrontView.vue'),
     children: [
       {
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/views/NotFound.vue')
+      },
+      {
         path: '',
         name: 'Home',
         component: () => import('../views/HomeView.vue')
@@ -24,8 +28,16 @@ const routes = [
         component: () => import('../views/ProductsView.vue')
       },
       {
-        path: '/:pathMatch(.*)*',
-        component: () => import('@/views/NotFound.vue')
+        path: 'article/:articleId',
+        component: () => import('@/views/UserArticle.vue')
+      },
+      {
+        path: 'checkout/:orderId',
+        component: () => import('@/views/UserCheckout.vue')
+      },
+      {
+        path: 'product/:productId',
+        component: () => import('@/views/UserProduct.vue')
       }
     ]
   },
@@ -48,7 +60,7 @@ const routes = [
       },
       {
         path: 'blog',
-        component: () => import('../views/dashboard/BlogView.vue')
+        component: () => import('../views/dashboard/ArticleView.vue')
       }
     ]
   },

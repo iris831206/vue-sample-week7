@@ -3,6 +3,12 @@ import 'sweetalert2/src/sweetalert2.scss'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+import Loading from 'vue-loading-overlay'
+
 import {
   Form, Field, ErrorMessage, defineRule, configure
 } from 'vee-validate'
@@ -29,6 +35,8 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(VueAxios, axios)
+app.component('VueLoading', Loading)
 app.component('VeeForm', Form)
 app.component('VeeField', Field)
 app.component('ErrorMessage', ErrorMessage)
