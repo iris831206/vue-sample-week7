@@ -3,6 +3,8 @@
 <nav>
     <RouterLink to="/admin/products">產品頁面</RouterLink> |
     <RouterLink to="/admin/order">訂單頁面</RouterLink>|
+    <RouterLink to="/admin/coupon">優惠券頁面</RouterLink>|
+    <RouterLink to="/admin/blog">貼文頁面</RouterLink>|
     <RouterLink to="/">回到前台</RouterLink>
 </nav>
 <RouterView></RouterView>

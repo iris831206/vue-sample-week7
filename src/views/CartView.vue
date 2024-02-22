@@ -1,12 +1,12 @@
 <template>
-    <h1>這是購物車頁面</h1>
+  <h1>這是購物車頁面</h1>
 
-  </template>
+</template>
 
 <script>
 export default {
 }
 </script>
 
-  <style scoped>
-  </style>
+<style scoped>
+</style>

@@ -63,11 +63,10 @@
   </template>
 
 <script>
-import PaginationComponents from '../../components/PaginationComponents.vue'
-import ProductModal from '../../components/ProductModal.vue'
+import PaginationComponents from '@/components/PaginationComponents.vue'
+import ProductModal from '@/components/ProductModal.vue'
 import axios from 'axios'
-const { VITE_API_URL } = import.meta.env
-const { VITE_API_PATH } = import.meta.env
+const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
 export default {
   data () {
@@ -150,6 +149,7 @@ export default {
   },
 
   mounted () {
+    this.getData()
   },
   components: {
     PaginationComponents,
