@@ -22,6 +22,10 @@ const routes = [
       {
         path: 'products',
         component: () => import('../views/ProductsView.vue')
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        component: () => import('@/views/NotFound.vue')
       }
     ]
   },
@@ -31,11 +35,11 @@ const routes = [
     component: () => import('../views/dashboard/DashboardView.vue'),
     children: [
       {
-        path: '/admin/order',
+        path: 'order',
         component: () => import('../views/dashboard/OrderView.vue')
       },
       {
-        path: '/admin/products',
+        path: 'products',
         component: () => import('../views/dashboard/ProductsView.vue')
       }
     ]
