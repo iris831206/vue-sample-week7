@@ -53,7 +53,7 @@
                 </tbody>
             </table>
             <!-- 分頁元件 -->
-            <PaginationComponents :pages="pages" :get-data="getData"></PaginationComponents>
+            <PaginationComponents :pages="pagination" @emitPages="getData"></PaginationComponents>
             <!-- 分頁元件 -->
         </div>
         <!-- Modal -->
@@ -77,17 +77,17 @@ export default {
         imagesUrl: []
       },
       isNew: false, // 判斷是否為新增產品
-      pages: {}
+      pagination: {}
     }
   },
   methods: {
-    getData (page = 1) { // 帶入分頁參數及預設值
+    getData (currentPage = 1) { // 帶入分頁參數及預設值
       // 取得資料
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/products?page=${page}`
+      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/products?page=${currentPage}`
       axios.get(url)
         .then((res) => {
           this.products = res.data.products
-          this.pages = res.data.pagination // 取得分頁
+          this.pagination = res.data.pagination // 取得分頁
         })
         .catch((err) => {
           alert(err.response.data.message)
