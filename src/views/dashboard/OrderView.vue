@@ -162,8 +162,7 @@
     </div>
   </div>
   <!--DelModal-->
-  <!--DelModal-->
-  <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
+  <div class="modal fade" id="delOrderModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
     ref="delOrderModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content border-0">
@@ -186,11 +185,10 @@
     </div>
   </div>
   <!--DelModal-->
-  <PaginationComponents :pages="pagination" @emitPages="getOrders" />
+
 </template>
 
 <script>
-import PaginationComponents from '@/components/PaginationComponents.vue'
 import { Modal } from 'bootstrap'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
@@ -246,9 +244,6 @@ export default {
         alert(error.response.data.message)
       })
     },
-    updatePage () {
-
-    },
     getOrders (currentPage = 1) {
       this.currentPage = currentPage
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/orders?page=${currentPage}`
@@ -262,9 +257,6 @@ export default {
         alert(error.response.data.message)
       })
     }
-  },
-  components: {
-    PaginationComponents
   },
   mounted () {
     this.OrderModal = new Modal(this.$refs.OrderModal)

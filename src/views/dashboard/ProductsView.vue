@@ -147,15 +147,13 @@ export default {
       this.tempProduct.imagesUrl.push('')
     }
   },
-
-  mounted () {
-    this.getData()
-  },
   components: {
     PaginationComponents,
     ProductModal
+  },
+  mounted () {
+    this.getData()
   }
-
 }
 </script>
 
