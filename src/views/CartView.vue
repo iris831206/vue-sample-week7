@@ -114,7 +114,7 @@
     </div>
 
     <div class="my-5 row justify-content-center">
-      <VeeForm ref="form" class="col-md-6" v-slot="{ errors }" @submit.prevent="createOrder">
+      <VeeForm ref="form" class="col-md-6" v-slot="{ errors }" @submit="createOrder">
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
           <VeeField id="email" name="email" type="email" class="form-control" :class="{ 'is-invalid': errors['email'] }"
