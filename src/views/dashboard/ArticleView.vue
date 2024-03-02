@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openModal(true)">
         建立新的頁面

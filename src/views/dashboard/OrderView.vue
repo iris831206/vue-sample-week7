@@ -1,4 +1,5 @@
 <template>
+  <div class="container">
   <table class="table mt-4">
     <thead>
       <tr>
@@ -48,6 +49,7 @@
       </template>
     </tbody>
   </table>
+</div>
   <!--OrderModal-->
   <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true" ref="OrderModal">

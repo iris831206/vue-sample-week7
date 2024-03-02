@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openCouponModal(true)">
         建立新的優惠券

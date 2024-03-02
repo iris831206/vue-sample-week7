@@ -1,5 +1,4 @@
 <template>
-    <h1>這是產品頁面</h1>
     <div class="container">
             <div class="text-end mt-4">
                 <button type="button" @click="openModal('new')" class="btn btn-primary">
