@@ -18,7 +18,7 @@
           <RouterLink to="/cart" class="nav-link btn btn-primary position-relative me-7">
             <i class="fas fa-shopping-cart"></i>
             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-              {{ this.carts.length }}
+              {{ carts.length }}
             </span>
             <span class="visually-hidden"></span>
           </RouterLink>

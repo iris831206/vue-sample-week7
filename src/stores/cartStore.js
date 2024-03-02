@@ -3,11 +3,13 @@ import axios from 'axios'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
 export default defineStore('cartStore', {
-  state: () => ({
-    carts: [],
-    final_total: 0,
-    total: 0
-  }),
+  state: () => {
+    return {
+      carts: [],
+      total: 0,
+      final_total: 0
+    }
+  },
   actions: {
     getCart () {
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
@@ -20,6 +22,19 @@ export default defineStore('cartStore', {
         }).catch((error) => {
           alert(error.response.data.message)
         })
+    },
+    addToCart (id, qty = 1) {
+      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
+      const cart = {
+        product_id: id,
+        qty
+      }
+      axios.post(url, { data: cart }).then((response) => {
+        alert(response.data.message)
+        this.getCart()
+      }).catch((error) => {
+        alert(error.response.data.message)
+      })
     }
   }
 })

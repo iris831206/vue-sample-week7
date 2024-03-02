@@ -65,8 +65,8 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="cart.carts">
-            <tr v-for="item in cart.carts" :key="item.id">
+          <template v-if="carts">
+            <tr v-for="item in carts" :key="item.id">
               <td>
                 <button type="button" class="btn btn-outline-danger btn-sm" :disabled="status.loadingItem === item.id"
                   @click="removeCartItem(item.id)">
@@ -180,6 +180,8 @@
 </template>
 
 <script>
+import cartStore from '@/stores/cartStore'
+import { mapActions, mapState } from 'pinia'
 import { Modal } from 'bootstrap'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
@@ -210,7 +212,6 @@ export default {
     openDelCartModal () {
       this.delCartModal.show()
     },
-
     getProducts () {
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/products`
       this.isLoading = true
@@ -225,24 +226,25 @@ export default {
     getProduct (id) {
       this.$router.push(`product/${id}`)
     },
-    addToCart (id, qty = 1) {
-      this.isLoading = true
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
-      this.status.loadingItem = id
-      const cart = {
-        product_id: id,
-        qty
-      }
+    ...mapActions(cartStore, ['addToCart']),
+    // addToCart (id, qty = 1) {
+    //   this.isLoading = true
+    //   const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
+    //   this.status.loadingItem = id
+    //   const cart = {
+    //     product_id: id,
+    //     qty
+    //   }
 
-      this.$http.post(url, { data: cart }).then((response) => {
-        this.status.loadingItem = ''
-        this.isLoading = false
-        this.getCart()
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
+    //   this.$http.post(url, { data: cart }).then((response) => {
+    //     this.status.loadingItem = ''
+    //     this.isLoading = false
+    //     this.getCart()
+    //   }).catch((error) => {
+    //     this.isLoading = false
+    //     alert(error.response.data.message)
+    //   })
+    // },
     deleteAllCarts () {
       this.isLoading = true
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/carts`
@@ -255,17 +257,19 @@ export default {
         alert(error.response.data.message)
       })
     },
-    getCart () {
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
-      this.isLoading = true
-      this.$http.get(url).then((response) => {
-        this.cart = response.data.data
-        this.isLoading = false
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
+    ...mapActions(cartStore, ['getCart']),
+
+    // getCart () {
+    //   const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
+    //   this.isLoading = true
+    //   this.$http.get(url).then((response) => {
+    //     this.cart = response.data.data
+    //     this.isLoading = false
+    //   }).catch((error) => {
+    //     this.isLoading = false
+    //     alert(error.response.data.message)
+    //   })
+    // },
     removeCartItem (id) {
       this.status.loadingItem = id
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart/${id}`
@@ -325,6 +329,9 @@ export default {
         alert(error.response.data.message)
       })
     }
+  },
+  computed: {
+    ...mapState(cartStore, ['carts'])
   },
   mounted () {
     this.delCartModal = new Modal(this.$refs.delCartModal)
