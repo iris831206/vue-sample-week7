@@ -75,8 +75,7 @@
 
 <script>
 import axios from 'axios'
-const { VITE_API_URL } = import.meta.env
-const { VITE_API_PATH } = import.meta.env
+const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
 export default {
   data () {
