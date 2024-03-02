@@ -194,7 +194,6 @@ export default {
       this.$http.get(url, this.tempProduct).then((response) => {
         this.coupons = response.data.coupons
         this.pagination = response.data.pagination
-        console.log(this.pagination)
         this.isLoading = false
       }).catch((error) => {
         this.isLoading = false
