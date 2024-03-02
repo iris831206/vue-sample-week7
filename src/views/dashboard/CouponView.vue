@@ -163,11 +163,12 @@ export default {
       if (!this.isNew) {
         url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/coupon/${this.tempCoupon.id}`
         httpMethos = 'put'
-        data = { ...this.tempCoupon, due_date: new Date(this.due_date).getTime() / 1000 }
+        data = this.tempCoupon
       }
 
       this.$http[httpMethos](url, { data }).then((response) => {
         this.isLoading = false
+        alert(response.data.message)
         this.getCoupons()
         this.couponModal.hide()
       }).catch((error) => {
