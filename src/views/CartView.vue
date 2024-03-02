@@ -60,12 +60,12 @@
           <tr>
             <th></th>
             <th>品名</th>
-            <th style="width: 200px">數量</th>
-            <th>單價</th>
+            <th style="width: 135px">數量</th>
+            <th>小計</th>
           </tr>
         </thead>
         <tbody>
-          <template v-if="carts">
+          <template v-if="carts && carts.length > 0">
             <tr v-for="item in carts" :key="item.id">
               <td>
                 <button type="button" class="btn btn-outline-danger btn-sm" :disabled="status.loadingItem === item.id"
@@ -79,26 +79,34 @@
               </td>
               <td>
                 <div class="input-group input-group-sm">
-                  <input type="number" class="form-control" min="1" v-model.number="item.qty" @blur="updateCart(item)" />
+                  <input type="number" class="form-control" min="1" v-model.number="item.qty"
+                    @blur="updateCart(item)" />
                   <div class="input-group-text">/ {{ item.product.unit }}</div>
                 </div>
               </td>
               <td class="text-end">
-                <small v-if="cart.final_total !== cart.total" class="text-success">折扣價：</small>
+                <small v-if="final_total !== total" class="text-success">折扣價：</small>
                 {{ item.final_total }}
               </td>
             </tr>
           </template>
+
+          <template v-else>
+            <tr>
+              <td colspan="4" class="text-center">目前沒有品項</td>
+            </tr>
+          </template>
         </tbody>
+
         <tfoot>
           <tr>
             <td colspan="3" class="text-end">總計</td>
-            <td class="text-end">{{ cart.total }}</td>
+            <td class="text-end">{{ total }}</td>
           </tr>
-          <tr v-if="cart.final_total !== cart.total">
+          <tr v-if="final_total !== total">
             <td colspan="3" class="text-end text-success">折扣價</td>
             <td class="text-end text-success">
-              {{ cart.final_total }}
+              {{ final_total }}
             </td>
           </tr>
         </tfoot>
@@ -154,8 +162,8 @@
     </div>
   </div>
   <!--delCouponModal-->
-<div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"
-    ref="delCartModal">
+  <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true" ref="delCartModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content border-0">
         <div class="modal-header bg-danger text-white">
@@ -176,7 +184,7 @@
       </div>
     </div>
   </div>
-<!--delCouponModal-->
+  <!--delCouponModal-->
 </template>
 
 <script>
@@ -331,7 +339,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(cartStore, ['carts'])
+    ...mapState(cartStore, ['carts', 'total', 'final_total'])
   },
   mounted () {
     this.delCartModal = new Modal(this.$refs.delCartModal)
