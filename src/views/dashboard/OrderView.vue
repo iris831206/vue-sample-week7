@@ -187,10 +187,11 @@
     </div>
   </div>
   <!--DelModal-->
-
+  <PaginationComponents :pages="pagination" @emitPages="getOrders" />
 </template>
 
 <script>
+import PaginationComponents from '@/components/PaginationComponents.vue'
 import { Modal } from 'bootstrap'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
@@ -259,6 +260,9 @@ export default {
         alert(error.response.data.message)
       })
     }
+  },
+  components: {
+    PaginationComponents
   },
   mounted () {
     this.OrderModal = new Modal(this.$refs.OrderModal)

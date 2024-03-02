@@ -10,6 +10,9 @@
           <RouterLink to="/admin/blog" class="nav-link">貼文頁面</RouterLink>
           <RouterLink to="/" class="nav-link">回到前台</RouterLink>
         </div>
+        <div class="navbar-nav ms-auto">
+          <a href="#" @click.prevent="logout" class="nav-link me-3">登出</a>
+        </div>
       </div>
     </div>
   </nav>
