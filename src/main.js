@@ -9,6 +9,8 @@ import VueAxios from 'vue-axios'
 
 import Loading from 'vue-loading-overlay'
 
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
 import {
   Form, Field, ErrorMessage, defineRule, configure
 } from 'vee-validate'
@@ -36,6 +38,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(VueAxios, axios)
+app.use(CKEditor)
 app.component('VueLoading', Loading)
 app.component('VeeForm', Form)
 app.component('VeeField', Field)
