@@ -15,7 +15,13 @@
 
         </div>
         <div class="navbar-nav ms-auto">
-          <RouterLink to="/cart" class="nav-link me-3"><i class="fas fa-shopping-cart"></i></RouterLink>
+          <RouterLink to="/cart" class="nav-link btn btn-primary position-relative me-7">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ this.carts.length }}
+            </span>
+            <span class="visually-hidden"></span>
+          </RouterLink>
         </div>
       </div>
     </div>
@@ -23,10 +29,22 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'pinia'
+import cartStore from '@/stores/cartStore'
 
 export default {
+  data () {
+    return {
+    }
+  },
   methods: {
-
+    ...mapActions(cartStore, ['getCart'])
+  },
+  computed: {
+    ...mapState(cartStore, ['carts'])
+  },
+  mounted () {
+    this.getCart()
   }
 }
 </script>
