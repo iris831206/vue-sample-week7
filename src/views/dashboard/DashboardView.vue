@@ -25,12 +25,22 @@ const { VITE_API_URL } = import.meta.env
 
 export default {
   methods: {
+    logout () {
+      const api = `${VITE_API_URL}/logout`
+      this.$http.post(api)
+        .then((response) => {
+          alert(response.data.message)
+          this.$router.push('/login')
+        }).catch((error) => {
+          alert(error.response.data.message)
+        })
+    },
     checkLogin () {
       // 驗證登入
       const url = `${VITE_API_URL}/api/user/check`
       axios.post(url)
         .then((res) => {
-          console.log('驗證成功:', res.data.success)
+          // console.log('驗證成功:', res.data.success)
         })
         .catch((err) => {
           alert(err.response.data.message)

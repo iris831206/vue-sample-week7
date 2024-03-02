@@ -23,20 +23,10 @@
 </template>
 
 <script>
-const { VITE_API_URL } = import.meta.env
 
 export default {
   methods: {
-    logout () {
-      const api = `${VITE_API_URL}/logout`
-      this.$http.post(api)
-        .then((response) => {
-          alert(response.data.message)
-          this.$router.push('/')
-        }).catch((error) => {
-          alert(error.response.data.message)
-        })
-    }
+
   }
 }
 </script>
