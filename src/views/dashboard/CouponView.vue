@@ -108,10 +108,13 @@
     </div>
   </div>
 <!--CouponModal-->
+<PaginationComponents :pages="pagination" @emitPages="getCoupons" />
+
   </div>
 </template>
 
 <script>
+import PaginationComponents from '@/components/PaginationComponents.vue'
 import { Modal } from 'bootstrap'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
@@ -119,6 +122,7 @@ export default {
   data () {
     return {
       coupons: {},
+      due_date: '',
       tempCoupon: {
         title: '',
         is_enabled: 0,
@@ -129,7 +133,9 @@ export default {
       isLoading: false,
       isNew: false,
       couponModal: null,
-      delCouponModal: null
+      delCouponModal: null,
+      currentPage: 1,
+      pagination: {}
     }
   },
   methods: {
@@ -181,17 +187,23 @@ export default {
         alert(error.response.data.message)
       })
     },
-    getCoupons () {
+    getCoupons (page = 1) {
+      this.currentPage = page
       this.isLoading = true
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/coupons`
+      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/coupons?page=${page}`
       this.$http.get(url, this.tempProduct).then((response) => {
         this.coupons = response.data.coupons
+        this.pagination = response.data.pagination
+        console.log(this.pagination)
         this.isLoading = false
       }).catch((error) => {
         this.isLoading = false
         alert(error.response.data.message)
       })
     }
+  },
+  components: {
+    PaginationComponents
   },
   mounted () {
     // 實體化BS modal
