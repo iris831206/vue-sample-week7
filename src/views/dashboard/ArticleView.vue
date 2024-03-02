@@ -140,10 +140,12 @@
       </div>
     </div>
     <!-- DelModal -->
+    <PaginationComponents :pages="pagination" @emitPages="getArticles" />
   </div>
 </template>
 
 <script>
+import PaginationComponents from '@/components/PaginationComponents.vue'
 import { Modal } from 'bootstrap'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
 
@@ -166,7 +168,8 @@ export default {
         toolbar: ['heading', 'bold', 'italic', '|', 'link']
       },
       articleModal: null,
-      delArticleModal: null
+      delArticleModal: null,
+      pagination: {}
     }
   },
   watch: {
@@ -261,6 +264,9 @@ export default {
         console.error('API request failed:', error)
       })
     }
+  },
+  components: {
+    PaginationComponents
   },
   mounted () {
     this.articleModal = new Modal(this.$refs.articleModal)
