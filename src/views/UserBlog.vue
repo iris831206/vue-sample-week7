@@ -1,5 +1,4 @@
 <template>
-    <h1>這是貼文頁面</h1>
     <div class="container">
     <div class="row row-cols-1 row-cols-md-2 g-4">
       <template v-for="article in articles" :key="article.id">
@@ -12,7 +11,7 @@
             </div>
             <div class="card-footer">
               <RouterLink
-                :to="`/user/article/${article.id}`"
+                :to="`/article/${article.id}`"
                 v-if="article.isPublic"
                 class="btn btn-outline-primary"
               >
