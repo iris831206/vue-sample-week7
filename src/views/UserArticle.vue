@@ -44,7 +44,6 @@ export default {
       this.$http.get(api).then((response) => {
         this.article = response.data.article
         this.isLoading = false
-        console.log('123456')
       }).catch((error) => {
         this.isLoading = false
         alert(error.response.data.message)
