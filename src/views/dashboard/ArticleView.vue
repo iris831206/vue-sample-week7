@@ -1,4 +1,5 @@
 <template>
+  <VueLoading :active="isLoading" :z-index="1060" />
   <div class="container">
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openModal(true)">
@@ -81,11 +82,11 @@
                       </button>
                     </div>
                   </div>
-                  <div class="col-md-2 mb-1" v-if="tempArticle.tag[tempArticle.tag.length - 1] || !tempArticle.tag.length">
+                  <!-- <div class="col-md-2 mb-1" v-if="tempArticle.tag[tempArticle.tag.length - 1] || !tempArticle.tag.length">
                     <button class="btn btn-outline-primary btn-sm d-block w-100" type="button" @click="tempArticle.tag.push('')">
                       新增標籤
                     </button>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="mb-3">
                   <label for="description" class="form-label">文章描述</label>

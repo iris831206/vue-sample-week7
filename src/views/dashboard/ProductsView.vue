@@ -1,4 +1,5 @@
 <template>
+  <VueLoading :active="isLoading" :z-index="1060" />
     <div class="container">
             <div class="text-end mt-4">
                 <button type="button" @click="openModal('new')" class="btn btn-primary">
@@ -70,7 +71,7 @@ const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 export default {
   data () {
     return {
-
+      isLoading: false,
       products: [],
       tempProduct: {
         imagesUrl: []
@@ -83,12 +84,15 @@ export default {
     getData (currentPage = 1) { // 帶入分頁參數及預設值
       // 取得資料
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/products?page=${currentPage}`
+      this.isLoading = true
       axios.get(url)
         .then((res) => {
           this.products = res.data.products
           this.pagination = res.data.pagination // 取得分頁
+          this.isLoading = false
         })
         .catch((err) => {
+          this.isLoading = false
           alert(err.response.data.message)
         })
     },
@@ -96,6 +100,7 @@ export default {
     updateProduct () {
       // 新增產品
       let url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/product`
+      this.isLoading = true
       let http = 'post'
       // 編輯產品
       if (!this.isNew) {
@@ -104,6 +109,7 @@ export default {
       }
       axios[http](url, { data: this.tempProduct })
         .then((res) => {
+          this.isLoading = false
           this.getData() // 重新渲染產品列表
           this.$refs.productModal.closeModal() // 關掉Modal
           this.tempProduct = {} // 清除欄位
@@ -115,13 +121,16 @@ export default {
     delProduct () {
       // 刪除產品
       const url = `${VITE_API_URL}/api/${VITE_API_PATH}/admin/product/${this.tempProduct.id}`
+      this.isLoading = true
       axios.delete(url, { data: this.tempProduct })
         .then((res) => {
+          this.isLoading = false
           this.getData()
           this.$refs.productModal.closeDelModal()
           this.tempProduct = {}
         })
         .catch((err) => {
+          this.isLoading = false
           alert(err.response.data.message)
         })
     },

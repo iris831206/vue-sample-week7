@@ -1,4 +1,5 @@
 <template>
+  <VueLoading :active="isLoading" :z-index="1060" />
   <div class="container">
   <table class="table mt-4">
     <thead>

@@ -1,4 +1,6 @@
 <template>
+    <VueLoading :active="isLoading" :z-index="1060" />
+
   <div class="container">
     <div class="mt-4">
       <!-- 產品列表 -->

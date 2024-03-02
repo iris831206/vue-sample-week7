@@ -1,4 +1,5 @@
 <template>
+  <VueLoading :active="isLoading" :z-index="1060" />
   <div class="container">
     <div class="text-end mt-4">
       <button class="btn btn-primary" type="button" @click="openCouponModal(true)">
