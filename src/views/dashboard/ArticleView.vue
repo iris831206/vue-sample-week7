@@ -85,6 +85,7 @@ export default {
       isNew: false,
       tempArticle: {},
       currentPage: 1,
+      delArticleModal: null,
       pagination: {}
     }
   },
