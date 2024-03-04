@@ -115,6 +115,7 @@ export default {
           this.tempProduct = {} // 清除欄位
         })
         .catch((err) => {
+          this.isLoading = false
           alert(err.response.data.message)
         })
     },
