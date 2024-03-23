@@ -9,8 +9,8 @@
       <li class="page-item" v-for="page in pages.total_pages" :key="page"
         :class="{ active: pages.current_page === page }">
         <span class="page-link" v-if="page === pages.current_page">{{
-          page
-        }}</span>
+        page
+      }}</span>
         <a class="page-link" v-else href="#" @click.prevent="updatePage(page)">{{ page }}</a>
       </li>
       <li class="page-item" :class="{ disabled: !pages.has_next }">

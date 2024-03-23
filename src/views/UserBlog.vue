@@ -1,6 +1,17 @@
 <template>
-    <VueLoading :active="isLoading" :z-index="1060" />
-    <div class="container">
+  <VueLoading :active="isLoading">
+    <div class="loadingio-spinner-ellipsis-tyhni0y6d0m">
+      <div class="ldio-vxrwqxfvut">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+  </VueLoading>
+
+  <div class="container">
     <div class="row row-cols-1 row-cols-md-2 g-4">
       <template v-for="article in articles" :key="article.id">
         <div class="col" v-if="article.isPublic">
@@ -11,11 +22,7 @@
               <div v-html="article.description"></div>
             </div>
             <div class="card-footer">
-              <RouterLink
-                :to="`/article/${article.id}`"
-                v-if="article.isPublic"
-                class="btn btn-outline-primary"
-              >
+              <RouterLink :to="`/article/${article.id}`" v-if="article.isPublic" class="btn btn-outline-primary">
                 文章頁面
               </RouterLink>
             </div>
@@ -24,9 +31,10 @@
       </template>
     </div>
   </div>
-  </template>
+</template>
 
 <script>
+import Swal from 'sweetalert2'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
 export default {
@@ -48,7 +56,12 @@ export default {
         this.isLoading = false
       }).catch((error) => {
         this.isLoading = false
-        alert(error.response.data.message)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
       })
     }
   },
@@ -58,5 +71,4 @@ export default {
 }
 </script>
 
-  <style scoped>
-  </style>
+<style scoped></style>

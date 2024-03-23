@@ -1,208 +1,157 @@
 <template>
-    <VueLoading :active="isLoading" :z-index="1060" />
-
-  <div class="container">
-    <div class="mt-4">
-      <!-- 產品列表 -->
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th>圖片</th>
-            <th>商品名稱</th>
-            <th>價格</th>
-            <th>功能</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="item in products" :key="item.id">
-            <td style="width: 200px">
-              <div style="
-                  height: 100px;
-                  background-size: cover;
-                  background-position: center;
-                  " :style="{ backgroundImage: `url(${item.imageUrl})` }"></div>
-            </td>
-            <td>
-              <a href="#" class="text-dark">{{ item.title }}</a>
-            </td>
-            <td>
-              <div class="h5" v-if="!item.price">
-                {{ item.origin_price }} 元
-              </div>
-              <del class="h6" v-if="item.price">原價 {{ item.origin_price }} 元</del>
-              <div class="h5" v-if="item.price">
-                現在只要 {{ item.price }} 元
-              </div>
-            </td>
-            <td>
-              <div class="btn-group btn-group-sm">
-                <button type="button" class="btn btn-outline-secondary"
-                  :disabled="status.loadingItem === item.id || !item.is_enabled" @click="getProduct(item.id)">
-                  <span class="spinner-border spinner-grow-sm" v-if="status.loadingItem === item.id"></span>
-                  查看更多
-                </button>
-                <button type="button" class="btn btn-outline-danger" @click="addToCart(item.id)"
-                  :disabled="status.loadingItem === item.id || !item.is_enabled">
-                  <span class="spinner-border spinner-grow-sm" v-if="status.loadingItem === item.id"></span>
-                  加到購物車
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- 購物車列表 -->
-      <div class="text-end">
-        <button class="btn btn-outline-danger" type="button" @click="openDelCartModal">
-          清空購物車
-        </button>
+  <VueLoading :active="isLoading">
+    <div class="loadingio-spinner-ellipsis-tyhni0y6d0m">
+      <div class="ldio-vxrwqxfvut">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
-      <table class="table align-middle">
-        <thead>
-          <tr>
-            <th></th>
-            <th>品名</th>
-            <th style="width: 135px">數量</th>
-            <th>小計</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="carts && carts.length > 0">
-            <tr v-for="item in carts" :key="item.id">
-              <td>
-                <button type="button" class="btn btn-outline-danger btn-sm" :disabled="status.loadingItem === item.id"
-                  @click="removeCartItem(item.id)">
-                  <i class="bi bi-x"></i>
-                </button>
-              </td>
-              <td>
-                {{ item.product.title }}
-                <div class="text-success" v-if="item.coupon">已套用優惠券</div>
-              </td>
-              <td>
-                <div class="input-group input-group-sm">
-                  <input type="number" class="form-control" min="1" v-model.number="item.qty"
-                    @blur="updateCart(item)" />
-                  <div class="input-group-text">/ {{ item.product.unit }}</div>
+    </div>
+  </VueLoading>
+  <div class="bg-light pt-5 pb-7">
+    <div class="container">
+      <div class="row justify-content-center flex-md-row flex-column-reverse">
+        <div class="col-md-6">
+          <div class="position-relative m-4">
+            <div class="progress" style="height: 1px;">
+              <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0"
+                aria-valuemax="100"></div>
+            </div>
+            <button type="button"
+              class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill"
+              style="width: 2rem; height:2rem;">1</button>
+            <button type="button"
+              class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill"
+              style="width: 2rem; height:2rem;">2</button>
+            <button type="button"
+              class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill"
+              style="width: 2rem; height:2rem;">3</button>
+          </div>
+          <div class="bg-white p-4">
+            <h4 class="fw-bold mb-2">填寫收件資訊</h4>
+            <div class="my-5 row justify-content-center">
+              <VeeForm ref="form" v-slot="{ errors }" @submit="createOrder">
+                <div class="mb-3">
+                  <label for="email" class="form-label">Email</label>
+                  <VeeField id="email" name="email" type="email" class="form-control"
+                    :class="{ 'is-invalid': errors['email'] }" placeholder="請輸入 Email" rules="email|required"
+                    v-model="form.user.email" />
+                  <ErrorMessage name="email" class="invalid-feedback" />
                 </div>
-              </td>
-              <td class="text-end">
-                <small v-if="final_total !== total" class="text-success">折扣價：</small>
-                {{ item.final_total }}
-              </td>
-            </tr>
-          </template>
 
-          <template v-else>
-            <tr>
-              <td colspan="4" class="text-center">目前沒有品項</td>
-            </tr>
-          </template>
-        </tbody>
+                <div class="mb-3">
+                  <label for="name" class="form-label">收件人姓名</label>
+                  <VeeField id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
+                    placeholder="請輸入姓名" rules="required" v-model="form.user.name" />
+                  <ErrorMessage name="姓名" class="invalid-feedback" />
+                </div>
 
-        <tfoot>
-          <tr>
-            <td colspan="3" class="text-end">總計</td>
-            <td class="text-end">{{ total }}</td>
-          </tr>
-          <tr v-if="final_total !== total">
-            <td colspan="3" class="text-end text-success">折扣價</td>
-            <td class="text-end text-success">
-              {{ final_total }}
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-      <div class="input-group mb-3 input-group-sm">
-        <input type="text" class="form-control" v-model="coupon_code" placeholder="請輸入優惠碼" />
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button" @click="addCouponCode">
-            套用優惠碼
-          </button>
+                <div class="mb-3">
+                  <label for="tel" class="form-label">收件人電話</label>
+                  <VeeField id="tel" name="電話" type="tel" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
+                    placeholder="請輸入電話" rules="required|min:8|max:10" v-model="form.user.tel" />
+                  <ErrorMessage name="電話" class="invalid-feedback" />
+                </div>
+
+                <div class="mb-3">
+                  <label for="address" class="form-label">收件人地址</label>
+                  <VeeField id="address" name="地址" type="text" class="form-control"
+                    :class="{ 'is-invalid': errors['地址'] }" placeholder="請輸入地址" rules="required"
+                    v-model="form.user.address" />
+                  <ErrorMessage name="地址" class="invalid-feedback" />
+                </div>
+
+                <div class="mb-3">
+                  <label for="message" class="form-label">留言</label>
+                  <textarea name="" id="message" class="form-control" cols="30" rows="10"
+                    v-model="form.message"></textarea>
+                </div>
+                <div class="text-end">
+                  <button type="submit" class="btn btn-dark py-3 px-7 rounded-0">送出訂單</button>
+                </div>
+              </VeeForm>
+            </div>
+          </div>
+          <div
+            class="d-flex flex-column-reverse flex-md-row mt-4 justify-content-between align-items-md-center align-items-end">
+            <RouterLink to="/products" class="text-dark mt-md-0 mt-3 text-decoration-none">
+              <i class="fas fa-chevron-left me-2"></i>繼續購物
+            </RouterLink>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="border p-4 mb-4">
+            <h4 class="mb-4">訂單明細</h4>
+            <template v-if="carts && carts.length > 0">
+              <div class="d-flex mt-3" v-for="item in carts" :key="item.id">
+                <img :src="item.product.imageUrl" :alt="item.product.title" class="me-2"
+                  style="width: 48px; height: 48px; object-fit: cover">
+                <div class="w-100">
+                  <div class="d-flex justify-content-between fw-bold">
+                    <p class="mb-0">{{ item.product.title }}</p>
+                    <p class="mb-0">x{{ item.qty }}</p>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <p class="text-muted mb-0"><small>NT${{ item.product.price }}/{{ item.product.unit }}</small></p>
+                    <template v-if="final_total !== total">
+                      <span><del>原價{{ item.total }}</del> 折扣價<span class="text-success fs-5"> {{ item.final_total
+                          }}元</span></span>
+                    </template>
+                    <template v-else>
+                      <p class="mb-0">小計 {{ item.total }}</p>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="d-flex mt-3">
+                <p class="mb-0">目前沒有品項</p>
+              </div>
+            </template>
+            <table class="table mt-4 border-top border-bottom text-muted">
+              <tbody>
+                <tr>
+                  <th scope="row" class="border-0 px-0 pt-4 font-weight-normal text-end">總計</th>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-between mt-4">
+              <p class="mb-0 h4 fw-bold">Total</p>
+              <p class="mb-0 h4 fw-bold" :class="{ 'text-decoration-line-through': final_total !== total }">NT
+                ${{ total }} 元</p>
+            </div>
+            <div class="d-flex justify-content-between mt-4" v-if="final_total !== total">
+              <p class="mb-0 h4 fw-bold"> </p>
+              <p class="mb-0 h4 fw-bold text-success">折扣價 {{ final_total }} 元</p>
+            </div>
+          </div>
+          <div class="input-group mb-3 input-group-sm" v-if="carts && carts.length > 0">
+            <input type="text" class="form-control" v-model="coupon_code" placeholder="請輸入優惠碼" />
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary" type="button" @click="addCouponCode">
+                套用優惠碼
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <div class="my-5 row justify-content-center">
-      <VeeForm ref="form" class="col-md-6" v-slot="{ errors }" @submit="createOrder">
-        <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
-          <VeeField id="email" name="email" type="email" class="form-control" :class="{ 'is-invalid': errors['email'] }"
-            placeholder="請輸入 Email" rules="email|required" v-model="form.user.email" />
-          <ErrorMessage name="email" class="invalid-feedback" />
-        </div>
-
-        <div class="mb-3">
-          <label for="name" class="form-label">收件人姓名</label>
-          <VeeField id="name" name="姓名" type="text" class="form-control" :class="{ 'is-invalid': errors['姓名'] }"
-            placeholder="請輸入姓名" rules="required" v-model="form.user.name" />
-          <ErrorMessage name="姓名" class="invalid-feedback" />
-        </div>
-
-        <div class="mb-3">
-          <label for="tel" class="form-label">收件人電話</label>
-          <VeeField id="tel" name="電話" type="tel" class="form-control" :class="{ 'is-invalid': errors['電話'] }"
-            placeholder="請輸入電話" rules="required|min:8|max:10" v-model="form.user.tel" />
-          <ErrorMessage name="電話" class="invalid-feedback" />
-        </div>
-
-        <div class="mb-3">
-          <label for="address" class="form-label">收件人地址</label>
-          <VeeField id="address" name="地址" type="text" class="form-control" :class="{ 'is-invalid': errors['地址'] }"
-            placeholder="請輸入地址" rules="required" v-model="form.user.address" />
-          <ErrorMessage name="地址" class="invalid-feedback" />
-        </div>
-
-        <div class="mb-3">
-          <label for="message" class="form-label">留言</label>
-          <textarea name="" id="message" class="form-control" cols="30" rows="10" v-model="form.message"></textarea>
-        </div>
-        <div class="text-end">
-          <button type="submit" class="btn btn-danger">送出訂單</button>
-        </div>
-      </VeeForm>
-    </div>
   </div>
-  <!--delCouponModal-->
-  <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true" ref="delCartModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content border-0">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title">
-            <span>清除購物車</span>
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          是否刪除全部品項 (刪除後將無法恢復)。
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">取消
-          </button>
-          <button type="button" class="btn btn-danger" @click="deleteAllCarts">確認刪除
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--delCouponModal-->
+
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 import cartStore from '@/stores/cartStore'
 import { mapActions, mapState } from 'pinia'
-import { Modal } from 'bootstrap'
 const { VITE_API_URL, VITE_API_PATH } = import.meta.env
 
 export default {
   data () {
     return {
-      products: [],
-      product: {},
-      status: {
-        loadingItem: ''
-      },
       form: {
         user: {
           name: '',
@@ -212,103 +161,30 @@ export default {
         },
         message: ''
       },
-      cart: {},
       isLoading: false,
-      coupon_code: '',
-      delCartModal: null
+      coupon_code: ''
     }
   },
   methods: {
-    openDelCartModal () {
-      this.delCartModal.show()
-    },
-    getProducts () {
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/products`
-      this.isLoading = true
-      this.$http.get(url).then((response) => {
-        this.products = response.data.products
-        this.isLoading = false
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
-    getProduct (id) {
-      this.$router.push(`product/${id}`)
-    },
     ...mapActions(cartStore, ['addToCart']),
-    // addToCart (id, qty = 1) {
-    //   this.isLoading = true
-    //   const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
-    //   this.status.loadingItem = id
-    //   const cart = {
-    //     product_id: id,
-    //     qty
-    //   }
-
-    //   this.$http.post(url, { data: cart }).then((response) => {
-    //     this.status.loadingItem = ''
-    //     this.isLoading = false
-    //     this.getCart()
-    //   }).catch((error) => {
-    //     this.isLoading = false
-    //     alert(error.response.data.message)
-    //   })
-    // },
-    deleteAllCarts () {
-      this.isLoading = true
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/carts`
-      this.$http.delete(url).then((response) => {
-        this.delCartModal.hide()
-        this.getCart()
-        this.isLoading = false
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
     ...mapActions(cartStore, ['getCart']),
-
-    // getCart () {
-    //   const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart`
-    //   this.isLoading = true
-    //   this.$http.get(url).then((response) => {
-    //     this.cart = response.data.data
-    //     this.isLoading = false
-    //   }).catch((error) => {
-    //     this.isLoading = false
-    //     alert(error.response.data.message)
-    //   })
-    // },
-    removeCartItem (id) {
-      this.status.loadingItem = id
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart/${id}`
+    createOrder () {
       this.isLoading = true
-      this.$http.delete(url).then((response) => {
-        alert(response.data.message)
-        this.status.loadingItem = ''
-        this.isLoading = false
+      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/order`
+      const order = this.form
+      this.$http.post(url, { data: order }).then((response) => {
+        this.$router.push(`checkout/${response.data.orderId}`)
+        this.$refs.form.resetForm()
         this.getCart()
+        this.isLoading = false
       }).catch((error) => {
         this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
-    updateCart (data) {
-      this.isLoading = true
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/cart/${data.id}`
-      const cart = {
-        product_id: data.product_id,
-        qty: data.qty
-      }
-
-      this.$http.put(url, { data: cart }).then((response) => {
-        alert(response.data.message)
-        this.isLoading = false
-        this.getCart()
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
       })
     },
     addCouponCode () {
@@ -318,25 +194,22 @@ export default {
       }
       this.isLoading = true
       this.$http.post(url, { data: coupon }).then((response) => {
-        alert(response.data.message)
+        Swal.fire({
+          icon: 'success',
+          title: response.data.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
         this.getCart()
         this.isLoading = false
       }).catch((error) => {
         this.isLoading = false
-        alert(error.response.data.message)
-      })
-    },
-    createOrder () {
-      this.isLoading = true
-      const url = `${VITE_API_URL}/api/${VITE_API_PATH}/order`
-      const order = this.form
-      this.$http.post(url, { data: order }).then((response) => {
-        this.$router.push(`checkout/${response.data.orderId}`)
-        this.$refs.form.resetForm()
-        this.isLoading = false
-      }).catch((error) => {
-        this.isLoading = false
-        alert(error.response.data.message)
+        Swal.fire({
+          icon: 'error',
+          title: error.response.data.message,
+          showConfirmButton: false,
+          timer: 1500
+        })
       })
     }
   },
@@ -344,8 +217,6 @@ export default {
     ...mapState(cartStore, ['carts', 'total', 'final_total'])
   },
   mounted () {
-    this.delCartModal = new Modal(this.$refs.delCartModal)
-    this.getProducts()
     this.getCart()
   }
 }

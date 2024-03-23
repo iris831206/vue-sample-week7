@@ -1,4 +1,3 @@
-import 'sweetalert2/src/sweetalert2.scss'
 import './assets/all.scss'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
